@@ -9,6 +9,7 @@
 #define SRC_TRIPCHAIN_TRIPCHAIN_H_
 #include <list>
 #include "TripChainData.h"
+#define MAX 4
 class TRIPCHAIN {
 public:
 	TRIPCHAIN();

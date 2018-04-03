@@ -2,28 +2,35 @@
 #include <ctime>
 #include <fstream>
 #include "DbConnection/DbConnection.h"
+#include "Config/ConfigFile.h"
 #include "TripChain/TripChain.h"
 
 using namespace std;
 
-#define DB_HOST "tcp://192.168.0.60:3306"
-#define DB_USER "sunkus711"
-#define DB_PASS "rmlduqrml1"
-#define DB_NAME "tripchain_daejeon_test"
+//#define DB_HOST "tcp://192.168.0.60:3306"
+//#define DB_USER "sunkus711"
+//#define DB_PASS "rmlduqrml1"
+//#define DB_NAME "tripchain_daejeon_test"
 
 void makeTM(tm* date_tm, string date, time_t* date_t);
 void timeTotm_str(tm* date_tm, time_t* date_t, string* str);
 
 //unordered_multimap<int, RAWDATA*> data;
-
+//  ./SmartCard_RawData YYYYMMDD YYYYMMDD
 int main(int argc, char* argv[]) // 1번째 인자 : 가장 작은 날짜, 없을 시 테이블 내에 가장 작은 날짜 검색
 {
+	ConfigFile config("conf/dbinfo.conf");
+	string DB_HOST, DB_USER, DB_PASS, DB_NAME;
+	DB_HOST = config.read<string>("DB_HOST");
+	DB_USER = config.read<string>("DB_USER");
+	DB_PASS = config.read<string>("DB_PASS");
+	DB_NAME = config.read<string>("DB_NAME");
+
 	// db연결
-	cout << DB_HOST << "에 연결중...";
 	DBCONNECTION db(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 	// 최소 날짜 찾기
-	cout << "완료!"<< endl << "최소날짜와 최대날짜 찾는 중...";
+	cout << "최소날짜와 최대날짜 찾는 중...";
 	string mindate, maxdate, cut;
 	tm* mindate_tm = new tm,* maxdate_tm = new tm,* cut_tm = new tm;
 	time_t mindate_t, maxdate_t, cut_t;
@@ -56,6 +63,7 @@ int main(int argc, char* argv[]) // 1번째 인자 : 가장 작은 날짜, 없�
 	// db에서 하루치 정보를 뽑아서 돌림
 	for(cut_t = mindate_t; cut_t <= maxdate_t; cut_t += 24*60*60)
 	{
+		cout << "날짜 : " << cut_t << endl;
 		time_t next_t = cut_t + 24*60*60;
 		tm* next_tm = new tm;
 		string next;
@@ -78,13 +86,13 @@ int main(int argc, char* argv[]) // 1번째 인자 : 가장 작은 날짜, 없�
 
 		cout << "트립체인데이터 생성 중...";
 		// csv파일 생성
-		ofstream o("tripchain.csv");
+		ofstream o("tripchain" + cut + ".csv");
 		tripchain->print(&o);
 		o.close();
 		cout << "완료!" << endl << "DB에 데이터 입력 중...";
 
 		// 테이블에 csv파일 입력
-		db.runQuery("LOAD DATA LOCAL INFILE 'tripchain.csv' INTO TABLE SMARTCARD_TRIPCHAIN FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\\n' IGNORE 1 LINES");
+		db.runQuery("LOAD DATA LOCAL INFILE 'tripchain" + cut + ".csv' INTO TABLE SMARTCARD_TRIPCHAIN FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\\n' IGNORE 1 LINES");
 		cout << "완료!" << endl;
 
 		delete next_tm;

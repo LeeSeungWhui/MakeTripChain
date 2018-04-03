@@ -56,9 +56,15 @@ void TRIPCHAINDATA::addData(sql::ResultSet* res, int trnsit_cnt)
 	// 총 이용객
 	int user_cnt = stoi(res->getString("이용객수"));
 	if(user_cnt > TOTAL_USER_CNT) TOTAL_USER_CNT = user_cnt;
-
-	TOTAL_AMT += stoi(res->getString("승차금액")) + stoi(res->getString("하차금액"));
-	TOTAL_DIST += stoi(PASNG_DIST[trnsit_cnt]);
+	string s = res->getString("승차금액"), h = res->getString("하차금액");
+	if(s != "~" && h != "~")
+	{
+		TOTAL_AMT += stoi(res->getString("승차금액")) + stoi(res->getString("하차금액"));
+	}
+	if(PASNG_DIST[trnsit_cnt] != "~")
+	{
+		TOTAL_DIST += stoi(PASNG_DIST[trnsit_cnt]);
+	}
 
 	string brdng_time = res->getString("탑승시간");
 	if(brdng_time != "~")
@@ -187,6 +193,10 @@ void TRIPCHAINDATA::print(ostream* fout)
 		*fout << "\"~\",";
 	}
 	string wday;
+	if(TC_DT.tm_hour < 4)
+	{
+		TC_DT.tm_wday--;
+	}
 	switch(TC_DT.tm_wday)
 	{
 	case 0:
@@ -209,9 +219,6 @@ void TRIPCHAINDATA::print(ostream* fout)
 		break;
 	case 6:
 		wday = "토";
-		break;
-	case 7:
-		wday = "일";
 		break;
 	}
 	*fout <<	"\"" << wday << "\"" << endl;

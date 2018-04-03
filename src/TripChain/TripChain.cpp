@@ -26,7 +26,7 @@ TRIPCHAIN::TRIPCHAIN(sql::ResultSet* res)
 			this->data.push_back(new TRIPCHAINDATA(res));
 			card_no_pre = res->getString("가상카드번호"); // 환승이 0인 경우의 카드번호
 		}
-		else if(trnsit_cnt > 3) // 환승횟수가 4 이상인 경우는 잘못된 데이터
+		else if(trnsit_cnt > MAX) // 환승횟수가 4 이상인 경우는 잘못된 데이터
 		{
 
 		}

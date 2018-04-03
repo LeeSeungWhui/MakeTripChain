@@ -52,7 +52,7 @@ int DBCONNECTION::connect()
 {
 	if(conn != nullptr)
 	{
-		conn->close();
+		//conn->close();
 	}
 	try
 	{
