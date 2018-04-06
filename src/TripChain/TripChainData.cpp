@@ -156,15 +156,15 @@ void TRIPCHAINDATA::print(ostream* fout)
 	for(int i = 0; i < 5; i++)
 	{
 		*fout <<
-				"\"" << TFCMN_CD[i] << "\"," <<
-				"\"" << ROUTE_ID[i] << "\"," <<
-				"\"" << CAR_ID[i] << "\"," <<
-				"\"" << PASNG_DIST[i] << "\"," <<
-				"\"" << TKCAR_DT[i] << "\"," <<
-				"\"" << GFF_DT[i] << "\"," <<
-				"\"" << TKCAR_STTN_ID[i] << "\"," <<
-				"\"" << GFF_STTN_ID[i] << "\"," <<
-				"\"" << TFCBIZER_ID[i] << "\",";
+				"\"" << (TFCMN_CD[i] == "" ? "0" : TFCMN_CD[i]) << "\"," <<
+				"\"" << (ROUTE_ID[i] == "" ? "0" : ROUTE_ID[i]) << "\"," <<
+				"\"" << (CAR_ID[i] == "" ? "0" : CAR_ID[i]) << "\"," <<
+				"\"" << (PASNG_DIST[i] == "" ? "0" : PASNG_DIST[i]) << "\"," <<
+				"\"" << (TKCAR_DT[i] == "" ? "0" : TKCAR_DT[i]) << "\"," <<
+				"\"" << (GFF_DT[i] == "" ? "0" : GFF_DT[i]) << "\"," <<
+				"\"" << (TKCAR_STTN_ID[i] == "" ? "0" : TKCAR_STTN_ID[i]) << "\"," <<
+				"\"" << (GFF_STTN_ID[i] == "" ? "0" : GFF_STTN_ID[i]) << "\"," <<
+				"\"" << (TFCBIZER_ID[i] == "" ? "0" : TFCBIZER_ID[i]) << "\",";
 	}
 	*fout <<
 			"\"" << dateTostr(TKCAR_DT_FIRST) << "\"," <<
