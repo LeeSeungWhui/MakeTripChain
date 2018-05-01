@@ -15,7 +15,7 @@ using namespace std;
 class TRIPCHAINDATA {
 public:
 	TRIPCHAINDATA();
-	TRIPCHAINDATA(sql::ResultSet* res);
+	TRIPCHAINDATA(sql::ResultSet* res, tm date);
 	virtual ~TRIPCHAINDATA();
 
 	// function

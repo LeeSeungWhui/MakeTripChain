@@ -12,8 +12,9 @@ TRIPCHAIN::TRIPCHAIN() {
 
 }
 
-TRIPCHAIN::TRIPCHAIN(sql::ResultSet* res)
+TRIPCHAIN::TRIPCHAIN(sql::ResultSet* res, tm date)
 {
+	this->date = date;
 	int trnsit_cnt;
 	string card_no_pre;
 	string card_no_next;
@@ -23,7 +24,7 @@ TRIPCHAIN::TRIPCHAIN(sql::ResultSet* res)
 
 		if(trnsit_cnt == 0) // 환승 횟수가 0인경우는 새로운 row 생성
 		{
-			this->data.push_back(new TRIPCHAINDATA(res));
+			this->data.push_back(new TRIPCHAINDATA(res, this->date));
 			card_no_pre = res->getString("가상카드번호"); // 환승이 0인 경우의 카드번호
 		}
 		else if(trnsit_cnt > MAX) // 환승횟수가 4 이상인 경우는 잘못된 데이터

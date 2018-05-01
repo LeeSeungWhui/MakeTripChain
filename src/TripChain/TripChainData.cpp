@@ -16,9 +16,9 @@ TRIPCHAINDATA::TRIPCHAINDATA() {
 	TOTAL_TIME = 0;
 }
 
-TRIPCHAINDATA::TRIPCHAINDATA(sql::ResultSet* res)
+TRIPCHAINDATA::TRIPCHAINDATA(sql::ResultSet* res, tm date)
 {
-	setDate(&TC_DT, res->getString("승차일시")); // 날짜
+	TC_DT = date; // 날짜
 	VIRTL_CARD_NO = res->getString("가상카드번호"); // 카드번호
 	TRNSC_ID = res->getString("트랜젝션ID"); // 트랜젝션ID
 	EXCCLC_AREA_CD = res->getString("정산지역코드");			// 정산지역코드
@@ -193,10 +193,10 @@ void TRIPCHAINDATA::print(ostream* fout)
 		*fout << "\"~\",";
 	}
 	string wday;
-	if(TC_DT.tm_hour < 4)
-	{
-		TC_DT.tm_wday--;
-	}
+//	if(TC_DT.tm_hour < 4)
+//	{
+//		TC_DT.tm_wday--;
+//	}
 	switch(TC_DT.tm_wday)
 	{
 	case 0:

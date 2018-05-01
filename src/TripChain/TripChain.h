@@ -13,11 +13,13 @@
 class TRIPCHAIN {
 public:
 	TRIPCHAIN();
-	TRIPCHAIN(sql::ResultSet* res);
+	TRIPCHAIN(sql::ResultSet* res, tm date);
 	virtual ~TRIPCHAIN();
 	void print(ostream* fout);	// 출력 함수
 
 	std::list<TRIPCHAINDATA*> data;
+	tm date;
+	string wday;
 };
 
 #endif /* SRC_TRIPCHAIN_TRIPCHAIN_H_ */

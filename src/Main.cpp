@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) // 1번째 인자 : 가장 작은 날짜, 없�
 
 	if(argc < 2) // 명령줄인자가 없으면 테이블내에서 최소값 검색
 	{
-		db.runQuery("select min(승차일시) as 최소값 from smartcard_normalized");
+		db.runQuery("select min(승차일시) as 최소값 from CARD_DATA_NORM");
 		db.getRes()->next();
 		mindate = db.getRes()->getString("최소값").substr(0, 8) + "040000";
 	}
@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) // 1번째 인자 : 가장 작은 날짜, 없�
 	}
 
 	// 최대 날짜 찾기
-	db.runQuery("select max(승차일시) as 최대값 from smartcard_normalized");
+	db.runQuery("select max(승차일시) as 최대값 from CARD_DATA_NORM");
 	db.getRes()->next();
 	maxdate = db.getRes()->getString("최대값").substr(0, 8) + "040000";
 	makeTM(mindate_tm, mindate, &mindate_t);
@@ -72,10 +72,10 @@ int main(int argc, char* argv[]) // 1번째 인자 : 가장 작은 날짜, 없�
 
 		// 원시데이터 가져오기
 		TRIPCHAIN* tripchain;
-		db.runQuery("select * from smartcard_normalized where 승차일시 between '" + cut + "' and '" + next + "'");
+		db.runQuery("select * from CARD_DATA_NORM where 승차일시 between '" + cut + "' and '" + next + "'");
 		if(db.getRes() != NULL)
 		{
-			tripchain = new TRIPCHAIN(db.getRes()); // TRIPCHAIN 클래스 생성
+			tripchain = new TRIPCHAIN(db.getRes(), *cut_tm); // TRIPCHAIN 클래스 생성
 		}
 		else
 		{
@@ -92,7 +92,7 @@ int main(int argc, char* argv[]) // 1번째 인자 : 가장 작은 날짜, 없�
 		cout << "완료!" << endl << "DB에 데이터 입력 중...";
 
 		// 테이블에 csv파일 입력
-		db.runQuery("LOAD DATA LOCAL INFILE 'tripchain" + cut + ".csv' INTO TABLE SMARTCARD_TRIPCHAIN FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\\n' IGNORE 1 LINES");
+		db.runQuery("LOAD DATA LOCAL INFILE 'tripchain" + cut + ".csv' INTO TABLE CARD_DATA_TRIPCHAIN FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\\n' IGNORE 1 LINES");
 		cout << "완료!" << endl;
 
 		delete next_tm;
